@@ -1,0 +1,15 @@
+.movimiento-vertical {
+    animation: moverArribaAbajo 3s infinite ease-in-out;
+}
+
+@keyframes moverArribaAbajo {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(30px); /* Ajusta la distancia de movimiento */
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
