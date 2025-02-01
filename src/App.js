@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/animations.css";
 
@@ -9,12 +9,8 @@ const Navbar = () => (
                 <img
                     src="/logoL_b-artemx_bc85898C.png"
                     alt="Logo"
-                    className="d-inline-block align-top"
-                    style={{
-                        marginRight: "10px",
-                        width: "300px",
-                        height: "100px",
-                    }}
+                    className="d-inline-block align-top img-fluid"
+                    style={{ maxWidth: "300px", height: "auto" }}
                 />
             </a>
 
@@ -58,7 +54,7 @@ const Navbar = () => (
                     </li>
                     <li className="nav-item">
                         <button
-                            className="btn btn-outline-light ms-2"
+                            className="btn btn-outline-light ms-lg-2 mt-2 mt-lg-0"
                             aria-label="Ingresar al sistema"
                         >
                             Ingresar
@@ -71,7 +67,20 @@ const Navbar = () => (
 );
 
 function App() {
+    const [canvasSize, setCanvasSize] = useState({ width: 600, height: 200 });
+
     useEffect(() => {
+        const handleResize = () => {
+            const containerWidth = document.querySelector('.canvas-container')?.offsetWidth || 600;
+            setCanvasSize({
+                width: Math.min(containerWidth, 600),
+                height: 200
+            });
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        
         const canvas = document.getElementById("blockchain-animation");
         const ctx = canvas.getContext("2d");
         const blocks = [];
@@ -88,7 +97,6 @@ function App() {
                 ctx.strokeStyle = "#000";
                 ctx.strokeRect(block.x, block.y, block.width, block.height);
 
-                // Connect blocks
                 if (index < blocks.length - 1) {
                     const nextBlock = blocks[index + 1];
                     ctx.beginPath();
@@ -100,38 +108,73 @@ function App() {
             });
         };
 
-        // Initialize blockchain blocks
-        for (let i = 0; i < 5; i++) {
-            createBlock(100 + i * 70, 100);
-        }
+        const initBlocks = () => {
+            blocks.length = 0;
+            const startX = (canvas.width - (5 * 70)) / 2;
+            for (let i = 0; i < 5; i++) {
+                createBlock(startX + i * 70, 100);
+            }
+        };
 
         const animate = () => {
+            canvas.width = canvasSize.width;
+            canvas.height = canvasSize.height;
+            initBlocks();
             drawBlockchain();
             requestAnimationFrame(animate);
         };
 
         animate();
-    }, []);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [canvasSize]);
 
     return (
         <div style={{ backgroundColor: "#000", color: "#fff", minHeight: "100vh" }}>
             <Navbar />
             <nav className="text-center py-4 bg-black border-b border-gray-800">
-                <h1 className="text-2xl font-bold text-green-400">Conectando a la Blockchain...</h1>
+            <h1 className="h3 h-lg-2 font-bold text-green-400">¡Lanzamiento muy pronto!</h1>
+            <h2 className="h3 h-lg-2 font-bold text-green-400">Conectando a la Blockchain...</h2>
             </nav>
 
             <div className="container text-center my-5">
-                <div className="position-relative">
+                <div className="position-relative canvas-container">
                     <img
                         src="/Logo_b-artemx_cp.png"
                         alt="Medalla"
                         className="img-fluid rounded-circle movimiento-vertical mx-auto mb-5"
-                        style={{ width: "150px" }}
+                        style={{ width: "60%", maxWidth: "150px" }}
                     />
-                    <p className="text-green-400 text-xl font-semibold">
-                        ✨ Próximo lanzamiento muy cerca... Conectando a la blockchain... ✨
-                    </p>
-                    <canvas id="blockchain-animation" width="600" height="200" className="mx-auto mt-4"></canvas>
+                    <canvas 
+                        id="blockchain-animation" 
+                        width={canvasSize.width} 
+                        height={canvasSize.height}
+                        className="mx-auto mt-4"
+                        style={{ width: "100%", maxWidth: "600px" }}
+                    ></canvas>
+                </div>
+                <div className="text-center mt-5">
+                    <h2 className="h4 h-lg-3 text-green-400 mb-4">¿Necesitas más información? Contáctanos</h2>
+                    <a 
+                        href="#contacto" 
+                        className="btn btn-outline-green btn-lg"
+                        style={{
+                            borderColor: "#00ff99",
+                            color: "#00ff99",
+                            transition: "all 0.3s ease",
+                            maxWidth: "300px",
+                            width: "100%"
+                        }}
+                        onMouseOver={(e) => {
+                            e.target.style.backgroundColor = "#00ff99";
+                            e.target.style.color = "#000";
+                        }}
+                        onMouseOut={(e) => {
+                            e.target.style.backgroundColor = "transparent";
+                            e.target.style.color = "#00ff99";
+                        }}
+                    >
+                        Escríbenos
+                    </a>
                 </div>
             </div>
         </div>
