@@ -132,8 +132,8 @@ function App() {
         <div style={{ backgroundColor: "#000", color: "#fff", minHeight: "100vh" }}>
             <Navbar />
             <nav className="text-center py-4 bg-black border-b border-gray-800">
-            <h1 className="h3 h-lg-2 font-bold text-green-400">¡Lanzamiento muy pronto!</h1>
-            <h2 className="h3 h-lg-2 font-bold text-green-400">Conectando a la Blockchain...</h2>
+            <h1 className="h3 h-lg-2 text-green-400">Bolsa del Arte México revoluciona el mercado del arte con un modelo fiduciario, blockchain y valuación certificada, democratizando el acceso y la comercialización global. Lanzamiento Septiembre 2025.</h1>
+            <h2 className="h6 h-lg-2 font-bold text-green-400">Conectando a la Blockchain...</h2>
             </nav>
 
             <div className="container text-center my-5">
