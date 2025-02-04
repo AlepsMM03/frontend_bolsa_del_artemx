@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/animations.css";
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import Formulario from './Formulario'; 
 
 const Navbar = () => (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container">
-            <a className="navbar-brand" href="/">
+            <Link className="navbar-brand" to="/">
                 <img
                     src="/logoL_b-artemx_bc85898C.png"
                     alt="Logo"
                     className="d-inline-block align-top img-fluid"
                     style={{ maxWidth: "300px", height: "auto" }}
                 />
-            </a>
+            </Link>
 
             <button
                 className="navbar-toggler"
@@ -72,9 +74,14 @@ function App() {
     useEffect(() => {
         const handleResize = () => {
             const containerWidth = document.querySelector('.canvas-container')?.offsetWidth || 600;
-            setCanvasSize({
-                width: Math.min(containerWidth, 600),
-                height: 200
+            setCanvasSize((prevSize) => {
+                if (prevSize.width !== containerWidth) {
+                    return {
+                        width: Math.min(containerWidth, 600),
+                        height: 200
+                    };
+                }
+                return prevSize;
             });
         };
 
@@ -126,58 +133,71 @@ function App() {
 
         animate();
         return () => window.removeEventListener('resize', handleResize);
-    }, [canvasSize]);
+    }, [canvasSize.width, canvasSize.height]);
 
     return (
-        <div style={{ backgroundColor: "#000", color: "#fff", minHeight: "100vh" }}>
-            <Navbar />
-            <nav className="text-center py-4 bg-black border-b border-gray-800">
-            <h1 className="h3 h-lg-2 text-green-400">Bolsa del Arte México revoluciona el mercado del arte con un modelo fiduciario, blockchain y valuación certificada, democratizando el acceso y la comercialización global. Lanzamiento Septiembre 2025.</h1>
-            <h2 className="h6 h-lg-2 font-bold text-green-400">Conectando a la Blockchain...</h2>
-            </nav>
+        <Router>
+            <div style={{ backgroundColor: "#000", color: "#fff", minHeight: "100vh" }}>
+                <Navbar />
+                
+                <Routes>
+                    <Route path="/" element={
+                        <>
+                            <nav className="text-center py-4 bg-black border-b border-gray-800">
+                                <h1 className="h3 h-lg-2 text-green-400">
+                                    Bolsa del Arte México revoluciona el mercado del arte con un modelo fiduciario, blockchain y valuación certificada, democratizando el acceso y la comercialización global. Lanzamiento Septiembre 2025.
+                                </h1>
+                                <h2 className="h6 h-lg-2 font-bold text-green-400">Conectando a la Blockchain...</h2>
+                            </nav>
 
-            <div className="container text-center my-5">
-                <div className="position-relative canvas-container">
-                    <img
-                        src="/Logo_b-artemx_cp.png"
-                        alt="Medalla"
-                        className="img-fluid rounded-circle movimiento-vertical mx-auto mb-5"
-                        style={{ width: "60%", maxWidth: "150px" }}
-                    />
-                    <canvas 
-                        id="blockchain-animation" 
-                        width={canvasSize.width} 
-                        height={canvasSize.height}
-                        className="mx-auto mt-4"
-                        style={{ width: "100%", maxWidth: "600px" }}
-                    ></canvas>
-                </div>
-                <div className="text-center mt-5">
-                    <h2 className="h4 h-lg-3 text-green-400 mb-4">¿Necesitas más información? Contáctanos</h2>
-                    <a 
-                        href="#contacto" 
-                        className="btn btn-outline-green btn-lg"
-                        style={{
-                            borderColor: "#00ff99",
-                            color: "#00ff99",
-                            transition: "all 0.3s ease",
-                            maxWidth: "300px",
-                            width: "100%"
-                        }}
-                        onMouseOver={(e) => {
-                            e.target.style.backgroundColor = "#00ff99";
-                            e.target.style.color = "#000";
-                        }}
-                        onMouseOut={(e) => {
-                            e.target.style.backgroundColor = "transparent";
-                            e.target.style.color = "#00ff99";
-                        }}
-                    >
-                        Escríbenos
-                    </a>
-                </div>
+                            <div className="container text-center my-5">
+                                <div className="position-relative canvas-container">
+                                    <img
+                                        src="/Logo_b-artemx_cp.png"
+                                        alt="Medalla"
+                                        className="img-fluid rounded-circle movimiento-vertical mx-auto mb-5"
+                                        style={{ width: "60%", maxWidth: "150px" }}
+                                    />
+                                    <canvas 
+                                        id="blockchain-animation" 
+                                        width={canvasSize.width} 
+                                        height={canvasSize.height}
+                                        className="mx-auto mt-4"
+                                        style={{ width: "100%", maxWidth: "600px" }}
+                                    ></canvas>
+                                </div>
+                                <div className="text-center mt-5">
+                                    <h2 className="h4 h-lg-3 text-green-400 mb-4">¿Necesitas más información? Contáctanos</h2>
+                                    <Link
+                                        to="/formulario"
+                                        className="btn btn-outline-green btn-lg"
+                                        style={{
+                                            borderColor: "#00ff99",
+                                            color: "#00ff99",
+                                            transition: "all 0.3s ease",
+                                            maxWidth: "300px",
+                                            width: "100%"
+                                        }}
+                                        onMouseOver={(e) => {
+                                            e.target.style.backgroundColor = "#00ff99";
+                                            e.target.style.color = "#000";
+                                        }}
+                                        onMouseOut={(e) => {
+                                            e.target.style.backgroundColor = "transparent";
+                                            e.target.style.color = "#00ff99";
+                                        }}
+                                    >
+                                        Escríbenos
+                                    </Link>
+                                </div>
+                            </div>
+                        </>
+                    }/>
+
+                    <Route path="/formulario" element={<Formulario />} />
+                </Routes>
             </div>
-        </div>
+        </Router>
     );
 }
 
